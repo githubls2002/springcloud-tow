@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: cloud-text
+  cloud:
+    config:
+      name: cloud-text
+      profile: dev
+      uri: http://127.0.0.1:9014
+management:
+  security:
+    enabled: false
+endpoints:
+  refresh:
+    enabled: true

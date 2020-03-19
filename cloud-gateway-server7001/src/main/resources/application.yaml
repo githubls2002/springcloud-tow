@@ -1,0 +1,14 @@
+server:
+  port: 7001
+spring:
+  application:
+    name: geteway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+zuul:
+  routes:
+#    out: /tut/**  #给服务提供者提供out设置映射  out 就是你注册在注册中心的名称
+    cloud-login: /login/**
+

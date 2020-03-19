@@ -1,0 +1,8 @@
+# Project exclude paths
+/cloud-feign-server9673/target/
+/cloud-gateway-server7001/target/
+/cloud-hystrix-server6754/target/
+/cloud-login-server8234/target/
+/cloud-nativecon-server9014/target/
+/cloud-registrati-server8761/target/
+/cloud-text-server7283/target/

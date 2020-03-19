@@ -19,4 +19,6 @@ public interface OperatingDao {
 
     @Select("select * from user")
     List<User>  FinallUser();
+    @Select("select * from user")
+    List<User>  FinallUsesr();
 }

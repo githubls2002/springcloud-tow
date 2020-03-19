@@ -1,0 +1,312 @@
+Index: cloud-login-server8234/src/main/resources/application.yaml
+===================================================================
+--- cloud-login-server8234/src/main/resources/application.yaml	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/src/main/resources/application.yaml	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
+@@ -1,18 +0,0 @@
+-#server:
+-#  port: 8233 #端口
+-#spring:
+-#  application:
+-#    name: cloud-login  #当前服务注册在 Eureka Server 上的名称
+-#  datasource:
+-#    url: jdbc:mysql://localhost:3306/ebook?characterEncoding=utf-8&serverTimezone=UTC
+-#    username: root
+-#    password: 888888
+-#    driver-class-name: com.mysql.cj.jdbc.Driver
+-#eureka:
+-#  client:
+-#    service-url:
+-#      defaultZone: http://localhost:8761/eureka/  #注册中心的访问地址
+-#
+-#  instance:
+-#    prefer-ip-address: true   #是否将当前的服务ip注册到Eureka Server
+-#
+Index: cloud-login-server8234/src/main/java/com/jy/ls/login/Mapper/OperatingDao.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/src/main/java/com/jy/ls/login/Mapper/OperatingDao.java	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/src/main/java/com/jy/ls/login/Mapper/OperatingDao.java	(date 1584654613009)
+@@ -16,8 +16,6 @@
+     @Select("select * from user where account=#{0}")
+     User finbyAccount(String account);
+ 
+-    @Update("UPDATE cs_user SET password = #{password} WHERE account =#{account} ")
+-    Integer xiugai(@Param("account") String account,@Param("password") String passwprd);
+ 
+     @Select("select * from user")
+     List<User>  FinallUser();
+Index: cloud-login-server8234/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/pom.xml	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/pom.xml	(date 1584654906868)
+@@ -18,6 +18,20 @@
+             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+             <version>2.2.1.RELEASE</version>
+         </dependency>
+-
++        <!-- 获取文件 -->
++        <dependency>
++            <groupId>org.springframework.cloud</groupId>
++            <artifactId>spring-cloud-starter-config</artifactId>
++            <version>2.2.1.RELEASE</version>
++        </dependency>
++        <dependency>
++            <groupId>org.springframework</groupId>
++            <artifactId>spring-test</artifactId>
++        </dependency>
++        <dependency>
++            <groupId>com.alibaba</groupId>
++            <artifactId>druid-spring-boot-starter</artifactId>
++            <version>1.1.9</version>
++        </dependency>
+     </dependencies>
+ </project>
+\ No newline at end of file
+Index: cloud-congithub-server9862/src/main/resources/application.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-congithub-server9862/src/main/resources/application.yml	(date 1584653784752)
++++ cloud-congithub-server9862/src/main/resources/application.yml	(date 1584653784752)
+@@ -0,0 +1,24 @@
++server:
++  port: 9862
++
++spring:
++  application:
++    name: cloud-congithub
++  cloud:
++    config:
++      server:
++        git:
++          uri: https://github.com/githubls2002/springcloud.git
++          search-paths: config
++          username: githubls2002
++          password: github43ls
++          skipSslValidation: true
++      label: master
++eureka:
++  client:
++    service-url:
++      defaultZone: http://localhost:8761/eureka/  #注册中心的访问地址
++
++  instance:
++    prefer-ip-address: true   #是否将当前的服务ip注册到Eureka Server
++
+Index: cloud-login-server8234/src/main/java/com/jy/ls/login/loginApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/src/main/java/com/jy/ls/login/loginApplication.java	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/src/main/java/com/jy/ls/login/loginApplication.java	(date 1584651135883)
+@@ -2,14 +2,17 @@
+  *
+  */
+ 
++import org.mybatis.spring.annotation.MapperScan;
+ import org.springframework.boot.SpringApplication;
+ import org.springframework.boot.autoconfigure.SpringBootApplication;
++import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+ 
+ /**
+  * @author LENOVO
+  * @date 2020/3/17 1:21
+  */
+-@SpringBootApplication
++@MapperScan(basePackages = {"com.jy.ls.login.Mapper"})
++@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+ public class loginApplication {
+     public static void main(String[] args) {
+         SpringApplication.run(loginApplication.class,args);
+Index: cloud-login-server8234/src/main/java/com/jy/ls/login/Service/InterfaceService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/src/main/java/com/jy/ls/login/Service/InterfaceService.java	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/src/main/java/com/jy/ls/login/Service/InterfaceService.java	(date 1584654613022)
+@@ -8,6 +8,6 @@
+ public interface InterfaceService {
+ 
+     CommonResult login(String account,String password);
+-    Integer xiugai(String account,String password);
++//    Integer xiugai(String account,String password);
+     CommonResult FinallUser();
+ }
+Index: cloud-login-server8234/src/main/java/com/jy/ls/login/conteroller/LayerConteroller.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/src/main/java/com/jy/ls/login/conteroller/LayerConteroller.java	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/src/main/java/com/jy/ls/login/conteroller/LayerConteroller.java	(date 1584654627595)
+@@ -30,10 +30,7 @@
+         return interfaceSe.login(account,password);
+     }
+ 
+-    @PostMapping("/xiugai")
+-    public Integer xiugai(String account,String password){
+-        return interfaceSe.xiugai(account,password);
+-    }
++
+ 
+     @GetMapping("/FinallUser")
+     public CommonResult FinallUser(){
+Index: cloud-login-server8234/src/main/java/com/jy/ls/login/login2Application.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/src/main/java/com/jy/ls/login/login2Application.java	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/src/main/java/com/jy/ls/login/login2Application.java	(date 1584654877348)
+@@ -2,14 +2,19 @@
+  *
+  */
+ 
++import org.junit.runner.RunWith;
++import org.mybatis.spring.annotation.MapperScan;
+ import org.springframework.boot.SpringApplication;
+ import org.springframework.boot.autoconfigure.SpringBootApplication;
++import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+ 
+ /**
+  * @author LENOVO
+  * @date 2020/3/17 1:21
+  */
+-@SpringBootApplication
++
++@MapperScan(basePackages = {"com.jy.ls.login.Mapper"})
++@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+ public class login2Application {
+     public static void main(String[] args) {
+         SpringApplication.run(login2Application.class,args);
+Index: cloud-login-server8234/src/main/java/com/jy/ls/login/Service/achieve/InterfaceAchieve.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/src/main/java/com/jy/ls/login/Service/achieve/InterfaceAchieve.java	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ cloud-login-server8234/src/main/java/com/jy/ls/login/Service/achieve/InterfaceAchieve.java	(date 1584654619347)
+@@ -33,11 +33,7 @@
+         }
+     }
+ 
+-    @Override
+-    public Integer xiugai(String account, String password) {
+-        Integer in=operating.xiugai(account,password);
+-        return in;
+-    }
++
+ 
+     @Override
+     public CommonResult FinallUser() {
+Index: cloud-login-server8234/src/main/resources/bootstrap.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-login-server8234/src/main/resources/bootstrap.yml	(date 1584653607363)
++++ cloud-login-server8234/src/main/resources/bootstrap.yml	(date 1584653607363)
+@@ -0,0 +1,8 @@
++spring:
++  cloud:
++    config:
++      name: cloud-login-dev
++      label: master
++      discovery:
++        enabled: true
++        service-id: cloud-congithub
+\ No newline at end of file
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pom.xml	(revision c97159dcd838c0d8ed82618764f8e430f24b3a46)
++++ pom.xml	(date 1584650102206)
+@@ -17,6 +17,7 @@
+         <module>cloud-hystrix-server6754</module>
+         <module>cloud-nativecon-server9014</module>
+         <module>cloud-text-server7283</module>
++        <module>cloud-congithub-server9862</module>
+     </modules>
+     <parent>
+         <groupId>org.springframework.boot</groupId>
+Index: cloud-congithub-server9862/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-congithub-server9862/pom.xml	(date 1584654100605)
++++ cloud-congithub-server9862/pom.xml	(date 1584654100605)
+@@ -0,0 +1,32 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0"
++         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
++    <parent>
++        <artifactId>springcloud</artifactId>
++        <groupId>org.example</groupId>
++        <version>1.0-SNAPSHOT</version>
++    </parent>
++    <modelVersion>4.0.0</modelVersion>
++
++    <artifactId>cloud-congithub-server9862</artifactId>
++
++    <dependencies>
++        <dependency>
++            <groupId>org.springframework.cloud</groupId>
++            <artifactId>spring-cloud-config-server</artifactId>
++            <version>2.2.1.RELEASE</version>
++        </dependency>
++        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client -->
++        <dependency>
++            <groupId>org.springframework.cloud</groupId>
++            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
++            <version>2.2.1.RELEASE</version>
++        </dependency>
++        <dependency>
++            <groupId>org.springframework.cloud</groupId>
++            <artifactId>spring-cloud-starter-eureka</artifactId>
++            <version>2.2.1.RELEASE</version>
++        </dependency>
++    </dependencies>
++</project>
+\ No newline at end of file
+Index: cloud-congithub-server9862/src/main/java/com/jy/ls/congithub/CongithubApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cloud-congithub-server9862/src/main/java/com/jy/ls/congithub/CongithubApplication.java	(date 1584654112751)
++++ cloud-congithub-server9862/src/main/java/com/jy/ls/congithub/CongithubApplication.java	(date 1584654112751)
+@@ -0,0 +1,22 @@
++package com.jy.ls.congithub;/**
++ *
++ */
++
++import org.springframework.boot.SpringApplication;
++import org.springframework.boot.autoconfigure.SpringBootApplication;
++import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
++import org.springframework.cloud.config.server.EnableConfigServer;
++import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
++
++/**
++ * @author LENOVO
++ * @date 2020/3/20 4:54
++ */
++@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
++@EnableConfigServer
++@EnableEurekaClient
++public class CongithubApplication {
++    public static void main(String[] args) {
++        SpringApplication.run(CongithubApplication.class,args);
++    }
++}

@@ -1,22 +1,22 @@
-package com.jy.ls.login;/**
+package com.jy.ls.congithub;/**
  *
  */
 
-import org.junit.runner.RunWith;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.cloud.config.server.EnableConfigServer;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * @author LENOVO
- * @date 2020/3/17 1:21
+ * @date 2020/3/20 4:54
  */
-
-@MapperScan(basePackages = {"com.jy.ls.login.Mapper"})
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-public class login2Application {
+@EnableConfigServer
+@EnableEurekaClient
+public class CongithubApplication {
     public static void main(String[] args) {
-        SpringApplication.run(login2Application.class,args);
+        SpringApplication.run(CongithubApplication.class,args);
     }
 }

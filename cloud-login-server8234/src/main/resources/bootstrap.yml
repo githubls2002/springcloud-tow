@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    config:
+      name: cloud-login-dev
+      label: master
+      discovery:
+        enabled: true
+        service-id: cloud-congithub

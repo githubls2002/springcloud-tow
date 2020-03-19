@@ -16,8 +16,6 @@ public interface OperatingDao {
     @Select("select * from user where account=#{0}")
     User finbyAccount(String account);
 
-    @Update("UPDATE cs_user SET password = #{password} WHERE account =#{account} ")
-    Integer xiugai(@Param("account") String account,@Param("password") String passwprd);
 
     @Select("select * from user")
     List<User>  FinallUser();

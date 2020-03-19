@@ -30,10 +30,7 @@ public class LayerConteroller {
         return interfaceSe.login(account,password);
     }
 
-    @PostMapping("/xiugai")
-    public Integer xiugai(String account,String password){
-        return interfaceSe.xiugai(account,password);
-    }
+
 
     @GetMapping("/FinallUser")
     public CommonResult FinallUser(){

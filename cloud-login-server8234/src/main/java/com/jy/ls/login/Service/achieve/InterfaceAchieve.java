@@ -33,11 +33,7 @@ public class InterfaceAchieve implements InterfaceService {
         }
     }
 
-    @Override
-    public Integer xiugai(String account, String password) {
-        Integer in=operating.xiugai(account,password);
-        return in;
-    }
+
 
     @Override
     public CommonResult FinallUser() {

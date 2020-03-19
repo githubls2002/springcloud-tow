@@ -17,6 +17,7 @@
         <module>cloud-hystrix-server6754</module>
         <module>cloud-nativecon-server9014</module>
         <module>cloud-text-server7283</module>
+        <module>cloud-congithub-server9862</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
